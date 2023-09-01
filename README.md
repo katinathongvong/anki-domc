@@ -1,7 +1,7 @@
 <!-- omit in toc -->
-# anki-mc
+# anki-domc
 
-Adds multiple choice cards to Anki.
+Adds discrete-option multiple choice cards to Anki.
 
 - [Screenshots](#screenshots)
 - [Compatibility](#compatibility)
