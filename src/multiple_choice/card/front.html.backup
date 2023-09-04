@@ -5,44 +5,26 @@
     if (void 0 === window.Persistence) { var _persistenceKey = "github.com/SimonLammer/anki-persistence/", _defaultKey = "_default"; if (window.Persistence_sessionStorage = function () { var e = !1; try { "object" == typeof window.sessionStorage && (e = !0, this.clear = function () { for (var e = 0; e < sessionStorage.length; e++) { var t = sessionStorage.key(e); 0 == t.indexOf(_persistenceKey) && (sessionStorage.removeItem(t), e--) } }, this.setItem = function (e, t) { void 0 == t && (t = e, e = _defaultKey), sessionStorage.setItem(_persistenceKey + e, JSON.stringify(t)) }, this.getItem = function (e) { return void 0 == e && (e = _defaultKey), JSON.parse(sessionStorage.getItem(_persistenceKey + e)) }, this.removeItem = function (e) { void 0 == e && (e = _defaultKey), sessionStorage.removeItem(_persistenceKey + e) }) } catch (e) { } this.isAvailable = function () { return e } }, window.Persistence_windowKey = function (e) { var t = window[e], i = !1; "object" == typeof t && (i = !0, this.clear = function () { t[_persistenceKey] = {} }, this.setItem = function (e, i) { void 0 == i && (i = e, e = _defaultKey), t[_persistenceKey][e] = i }, this.getItem = function (e) { return void 0 == e && (e = _defaultKey), t[_persistenceKey][e] || null }, this.removeItem = function (e) { void 0 == e && (e = _defaultKey), delete t[_persistenceKey][e] }, void 0 == t[_persistenceKey] && this.clear()), this.isAvailable = function () { return i } }, window.Persistence = new Persistence_sessionStorage, Persistence.isAvailable() || (window.Persistence = new Persistence_windowKey("py")), !Persistence.isAvailable()) { var titleStartIndex = window.location.toString().indexOf("title"), titleContentIndex = window.location.toString().indexOf("main", titleStartIndex); titleStartIndex > 0 && titleContentIndex > 0 && titleContentIndex - titleStartIndex < 10 && (window.Persistence = new Persistence_windowKey("qt")) } }
 </script>
 
-<h3 id="myH1">test title</h3>
-
-<!-- Question placeholder -->
-<p>Is this a color of the rainbow?</p>
-
-<!--
-    {{#Title}}<h3 id="myH1">{{Title}}</h3>{{/Title}}
+{{#Title}}<h3 id="myH1">{{Title}}</h3>{{/Title}}
 {{#Question}}<p>{{Question}}</p>{{/Question}}
--->
 
 <div class="tappable">
     <table style="border: 1px solid black" id="qtable"></table>
 </div>
 
-<!--
-    Placeholder for question array
--->
-
-<!-- 
 <div class="test" id="Q_solutions">{{Answers}}</div>
--->
-
-<div class="test" id="Q_solutions">1 1 1 0 1</div>
 <!--
     <div class="hidden" id="Card_Type">{{QType (0=kprim,1=mc,2=sc)}}</div>
 -->
+
 <div class="test" id="Card_Type">0</div>
-<div class="test" id="Q_1">red</div>
-<div class="test" id="Q_2">blue</div>
-<div class="test" id="Q_3">green</div>
-<div class="test" id="Q_4">periwinkle</div>
-<div class="test" id="Q_5">indigo</div>
+<div class="test" id="Q_1">{{Q_1}}</div>
+<div class="test" id="Q_2">{{Q_2}}</div>
+<div class="test" id="Q_3">{{Q_3}}</div>
+<div class="test" id="Q_4">{{Q_4}}</div>
+<div class="test" id="Q_5">{{Q_5}}</div>
 
 <script>
-
-    function generateJSONAnswerArray(){
-        alert("generateJSONAnswerArray ran!")
-    }
     // Generate the table depending on the type.
     function generateTable() {
 
