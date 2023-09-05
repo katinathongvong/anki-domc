@@ -60,6 +60,8 @@
     </tr>
 </table>
 
+<button onClick="">Show me an answer</button>
+
 <script>
 
     function generateJSONSolutionArray(){
@@ -93,8 +95,25 @@
                 
 
             }
+            console.log("generated initial array");
+            console.log(JSONSolutionArray);
             return JSONSolutionArray;
         }
+    
+    // Shuffle the array
+    // from: https://www.freecodecamp.org/news/how-to-shuffle-an-array-of-items-using-javascript-or-typescript/
+    function shuffleJSONArray(JSONArray) {
+
+        var arrCopy = Object.assign([], JSONArray);
+        let i = JSONArray.length;
+  while (i > 0) {
+    const ri = Math.floor(Math.random() * i);
+    i--;
+    [arrCopy[i], arrCopy[ri]] = [arrCopy[ri], arrCopy[i]];
+  }
+  return arrCopy;
+  } 
+
     // Generate the table depending on the type.
     /*
     function generateTable() {
@@ -192,6 +211,7 @@
      * @param   {type}                              int             Card type
      * @param   {maxQuestionsToShow}                int             see config options
      */
+    /*
     function getShuffledQuestionTableHtmlLinesToSolution(
         questionTableHtmlLinesToSolution, type, maxQuestionsToShow) {
 
@@ -221,6 +241,7 @@
             return wrongAnswers;
         }
     }
+    */
 
     /**
      * Returns true if the option box/circle is checked.
@@ -347,7 +368,15 @@
 
 
        // setTimeout(generateTable(), 1);
-        generateJSONSolutionArray();
+        var JSONSolutionArray = generateJSONSolutionArray();
+        console.log("running in the body...");
+        console.log(JSONSolutionArray);
+
+        var shuffled = shuffleJSONArray(JSONSolutionArray);
+        console.log("shuffled");
+        console.log(shuffled);
+
+
 
 
     }
