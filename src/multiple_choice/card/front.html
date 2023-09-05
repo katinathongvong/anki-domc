@@ -27,23 +27,76 @@
 <div class="test" id="Q_solutions">{{Answers}}</div>
 -->
 
-<div class="test" id="Q_solutions">1 1 1 0 1</div>
+<div class="test" id="solutions">1 1 1 0 1</div>
 <!--
     <div class="hidden" id="Card_Type">{{QType (0=kprim,1=mc,2=sc)}}</div>
 -->
+
+<!-- 
 <div class="test" id="Card_Type">0</div>
 <div class="test" id="Q_1">red</div>
 <div class="test" id="Q_2">blue</div>
 <div class="test" id="Q_3">green</div>
 <div class="test" id="Q_4">periwinkle</div>
 <div class="test" id="Q_5">indigo</div>
+-->
+
+<p>answer test table</p>
+<table id="choices" style="border: 1px solid">
+    <tr id ="0">
+        <td id="answer_0">red</td>
+    </tr>
+    <tr id="1">
+        <td id="answer_1">blue</td>
+    </tr>
+    <tr id="2">
+        <td id="answer_2">green</td>
+    </tr>
+    <tr id="3">
+        <td id="answer_3">periwinkle</td>
+    </tr>
+    <tr id="4">
+        <td id="answer_4">indigo</td>
+    </tr>
+</table>
 
 <script>
 
-    function generateJSONAnswerArray(){
-        alert("generateJSONAnswerArray ran!")
-    }
+    function generateJSONSolutionArray(){
+        console.log("generateJSONSolutionArray ran");
+        const solutionArray = document.getElementById("solutions").textContent.split(" ");
+        console.log("The solutionArray is: " + solutionArray)
+
+        // create the empty array to populate
+        var JSONSolutionArray = [];
+        var choiceTable = document.getElementById("choices");
+        for (let i = 0 ; i < choiceTable.rows.length; i++) 
+            {
+                console.log(i);
+                currentRow = choiceTable.rows[i];
+                console.log(currentRow);
+                console.log("currentCell")
+                currentCell = currentRow.cells;
+                console.log(currentCell);
+                cellId = "answer_" + i;
+                var solutionText = document.getElementById(cellId).innerHTML;
+                console.log("Solution text");
+                console.log(solutionText);
+                var tempJSON = {
+                    "choice": solutionText,
+                    "solution": solutionArray[i]
+                };
+
+                JSONSolutionArray.push(tempJSON);
+             // your code below
+                console.log(JSONSolutionArray);
+                
+
+            }
+            return JSONSolutionArray;
+        }
     // Generate the table depending on the type.
+    /*
     function generateTable() {
 
         // Options are modified according to user's meta.json in the addon's folder
@@ -121,6 +174,7 @@
 
         onCheck();  // store user answers at least once in case nothing was ticked
     }
+    */
 
     function stripHtmlTagsFromSolutionString() {
         let solutionString = document.getElementById("Q_solutions").innerHTML;
@@ -277,6 +331,7 @@
         let DEFAULT_CARD_TYPE = 1;
         let DEFAULT_SOLUTIONS = "1 0 0 0 0";
 
+        /*
         if (isNaN(document.getElementById("Card_Type").innerHTML)) {
             document.getElementById("Card_Type").innerHTML = DEFAULT_CARD_TYPE;
         }
@@ -287,10 +342,12 @@
         if (document.getElementById("Card_Type").innerHTML != 0 && !isMobile()) {
             addCheckboxTickingShortcuts();
         }
+        */
 
 
 
-        setTimeout(generateTable(), 1);
+       // setTimeout(generateTable(), 1);
+        generateJSONSolutionArray();
 
 
     }

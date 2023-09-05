@@ -52,3 +52,7 @@ label {
   overflow: hidden;
   visibility: hidden;
 }
+
+.style-table {
+  border: 1px solid;
+}
