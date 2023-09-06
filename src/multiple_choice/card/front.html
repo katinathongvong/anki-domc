@@ -153,6 +153,13 @@
 
     }
 
+    function checkIfAtEndOfArray(currentIndex, lastIndex) {
+        console.log("running checkIfAtEndOfArray");
+        console.log(currentIndex == lastIndex);
+    }
+
+    //TODO: write answers to persistence
+
     /**
      * Get the solutions stored in the hidden div with id "Q_solutions" as Array.
      */
@@ -257,19 +264,44 @@
 
 
         //TODO: Generate answer container, but keep it hidden so this function works
+    
+       // console.log("while loop");
 
+            console.log("while loop");
         document.getElementById("yesButton").onclick = function() {
+            if (currentIndexInShuffled < lastIndexInShuffled) {
             showNext(shuffled, currentIndexInShuffled, 1);
             currentIndexInShuffled++;
-            console.log(shuffled);
+            //console.log(shuffled);
+            }
+            else {
+                console.log("DONE!");
+                document.getElementById("yesButton").style.display = "none";
+                document.getElementById("noButton").style.display = "none";
+                document.getElementById("answerText").innerHTML = "Please review your answers."
+                console.log(shuffled);
+            }
         }
 
         document.getElementById("noButton").onclick = function() {
+            if (currentIndexInShuffled < lastIndexInShuffled){
             showNext(shuffled, currentIndexInShuffled, 0);
             currentIndexInShuffled++;
+            }
+            else {
+                console.log("DONE!");
+                document.getElementById("yesButton").style.display = "none";
+                document.getElementById("noButton").style.display = "none";
+                document.getElementById("answerText").innerHTML = "Please review your answers."
+                console.log(shuffled);
+            }
         }
 
     }
+
+    
+    
+    
 
 
 
@@ -290,7 +322,7 @@
     license (https://creativecommons.org/licenses/by-sa/4.0/).
     */
     if (document.readyState === "complete") {
-        setTimeout(run, 100);
+        run();
     } else {
         waitForReadyStateAndRun();
     }
