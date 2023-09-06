@@ -9,14 +9,15 @@
 
 {{#Title}}<h3>{{Title}}</h3>{{/Title}}
 {{#Question}}<p>{{Question}}</p>{{/Question}}
-<table id="solutionArea"></table>
+<p id="percentageCorrect"></p>
+<table id="solutionTable"></table>
 
 
 <script>
     "use strict";
 
     function generateSolutionTableFromJSON(JSONArray) {
-        var headers = `
+        var tableContent = `
             <tr>
             <th>Option</th>
             <th>Solution</th>
@@ -27,16 +28,16 @@
         `
 
         for (let i = 0; i < JSONArray.length; i++) {
-            headers += "<tr>";
-            headers += "<td>" + JSONArray[i]["choice"] + "</td>";
-            headers += "<td>" + JSONArray[i]["solution"] + "</td>";
-            headers += "<td>" + JSONArray[i]["userAnswer"] + "</td>";
-            headers += "<td>" + JSONArray[i]["feedback"]+ "</td>";
-            headers += "<td>" +  JSONArray[i]["isUserAnswerCorrect"] + "</td>";
-            headers += "</tr>"
+            tableContent += "<tr>";
+            tableContent += "<td>" + JSONArray[i]["choice"] + "</td>";
+            tableContent += "<td>" + JSONArray[i]["solution"] + "</td>";
+            tableContent += "<td>" + JSONArray[i]["userAnswer"] + "</td>";
+            tableContent += "<td>" + JSONArray[i]["feedback"]+ "</td>";
+            tableContent += "<td>" +  JSONArray[i]["isUserAnswerCorrect"] + "</td>";
+            tableContent += "</tr>"
         }
 
-        document.getElementById("solutionArea").innerHTML = headers;
+        document.getElementById("solutionTable").innerHTML = tableContent;
 
     }
 
@@ -46,12 +47,19 @@
 
         var lengthOfArray = JSONArray.length;
         var numCorrectAnswers = 0;
+        var percentageCorrect = 0;
+
         console.log("calculatePercentageOfCorrectAnswers: lengthOfArray: " + lengthOfArray);
         for (let i = 0; i < lengthOfArray; i++) {
             if (JSONArray[i]["isUserAnswerCorrect"] == "✓") {
-
+                numCorrectAnswers++;
             }
         }
+
+        percentageCorrect = (100 * numCorrectAnswers) / lengthOfArray;
+        console.log("calculatePercentageOfCorrectAnswers: percentageCorrect: " + percentageCorrect);
+
+        document.getElementById("percentageCorrect").innerHTML = "<b>Percent correct: " + percentageCorrect + "%" + "</b>";
     }
 
     function onLoad() {
@@ -68,6 +76,7 @@
             var JSONSolutionArray = JSON.parse(placeholderJSONString);
 
             generateSolutionTableFromJSON(JSONSolutionArray);
+            calculatePercentageOfCorrectAnswers(JSONSolutionArray);
             
             Persistence.clear();
     
