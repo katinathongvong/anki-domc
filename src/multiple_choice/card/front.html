@@ -1,4 +1,6 @@
 <script>
+    //BIG TODO: write better comments please
+    //use JSDOC: https://jsdoc.app/about-getting-started.html
     // Loading Persistence
     // https://github.com/SimonLammer/anki-persistence
     // v0.5.2 - https://github.com/SimonLammer/anki-persistence/blob/62463a7f63e79ce12f7a622a8ca0beb4c1c5d556/script.js
@@ -7,46 +9,46 @@
 
 <link rel="stylesheet" href="css.css">
 
-<h3 id="myH1">test title</h3>
 
-<!-- Question placeholder -->
+<!-- QUESTION PLACEHOLDER:
 <p>Is this a color of the rainbow?</p>
+-->
 
-    {{#Title}}<h3 id="myH1">{{Title}}</h3>{{/Title}}
+{{#Title}}<h3 id="myH1">{{Title}}</h3>{{/Title}}
 {{#Question}}<p>{{Question}}</p>{{/Question}}
 
-<div class="tappable">
-    <table style="border: 1px solid black" id="qtable"></table>
-</div>
+<div class="solutions" style="display: none;">{{Answers}}</div>
 
-<div class="test" id="solutions">1 0 1 1 0</div>
-
-
-<!--
-<p>answer test table</p>
 <table id="choices" style="display: none;">
-    <tr id ="0">
+    <tr id="0">
         <td id="answer_0">{{Q_1}}</td>
-
+        <td id="feedback_0">Is a color of the rainbow.</td>
     </tr>
     <tr id="1">
         <td id="answer_1">{{Q_2}}</td>
+        <td id="feedback_1">Not a color of the rainbow.</td>
     </tr>
     <tr id="2">
         <td id="answer_2">{{Q_3}}</td>
+        <td id="feedback_2">Is a color of the rainbow.</td>
+
     </tr>
     <tr id="3">
-        <td id="answer_3">periwinkle</td>
+        <td id="answer_3">{{Q_4}}</td>
+        <td id="feedback_3"></td>
     </tr>
     <tr id="4">
-        <td id="answer_4">indigo</td>
+        <td id="answer_4">{{Q_5}}</td>
+        <td id="feedback_4">Is not a color of the rainbow.</td>
+
     </tr>
 </table>
 
--->
 
+<!--
+    PLACEHOLDER TEST DATA
 <table id="choices" style="display: none;">
-    <tr id ="0">
+    <tr id="0">
         <td id="answer_0">red</td>
         <td id="feedback_0">Is a color of the rainbow.</td>
     </tr>
@@ -69,6 +71,7 @@
 
     </tr>
 </table>
+-->
 
 <div id="answerContainer">
     <button id="showAnswerButton">Show me an answer</button>
@@ -82,7 +85,7 @@
 
 <script>
 
-    function generateJSONSolutionArray(){
+    function generateJSONSolutionArray() {
         console.log("generateJSONSolutionArray ran");
         const solutionArray = document.getElementById("solutions").textContent.split(" ");
         console.log("The solutionArray is: " + solutionArray)
@@ -90,33 +93,32 @@
         // create the empty array to populate
         var JSONSolutionArray = [];
         var choiceTable = document.getElementById("choices");
-        for (let i = 0 ; i < choiceTable.rows.length; i++) 
-            {
-                solutionTextCellId = "answer_" + i;
-                feedbackTextCellId = "feedback_" + i;
-                var solutionText = document.getElementById(solutionTextCellId).innerHTML;
-                var feedbackText = document.getElementById(feedbackTextCellId).innerHTML;
-                console.log("Solution text");
-                console.log(solutionText);
-                var tempJSON = {
-                    "choice": solutionText,
-                    "solution": solutionArray[i],
-                    "userAnswer": "",
-                    "feedback": feedbackText,
-                    "isUserAnswerCorrect": ""
-                };
+        for (let i = 0; i < choiceTable.rows.length; i++) {
+            solutionTextCellId = "answer_" + i;
+            feedbackTextCellId = "feedback_" + i;
+            var solutionText = document.getElementById(solutionTextCellId).innerHTML;
+            var feedbackText = document.getElementById(feedbackTextCellId).innerHTML;
+            console.log("Solution text");
+            console.log(solutionText);
+            var tempJSON = {
+                "choice": solutionText,
+                "solution": solutionArray[i],
+                "userAnswer": "",
+                "feedback": feedbackText,
+                "isUserAnswerCorrect": ""
+            };
 
-                JSONSolutionArray.push(tempJSON);
-             // your code below
-                console.log(JSONSolutionArray);
-                
-
-            }
-            console.log("generated initial array");
+            JSONSolutionArray.push(tempJSON);
+            // your code below
             console.log(JSONSolutionArray);
-            return JSONSolutionArray;
+
+
         }
-    
+        console.log("generated initial array");
+        console.log(JSONSolutionArray);
+        return JSONSolutionArray;
+    }
+
     // Shuffle the array
     //https://raddevon.com/articles/copy-javascript-object/
     // from: https://www.freecodecamp.org/news/how-to-shuffle-an-array-of-items-using-javascript-or-typescript/
@@ -124,38 +126,32 @@
 
         var shuffledArray = Object.assign([], JSONArray);
         let i = JSONArray.length;
-  while (i > 0) {
-    const ri = Math.floor(Math.random() * i);
-    i--;
-    [shuffledArray[i], shuffledArray[ri]] = [shuffledArray[ri], shuffledArray[i]];
-  }
-  return shuffledArray;
-  } 
+        while (i > 0) {
+            const ri = Math.floor(Math.random() * i);
+            i--;
+            [shuffledArray[i], shuffledArray[ri]] = [shuffledArray[ri], shuffledArray[i]];
+        }
+        return shuffledArray;
+    }
 
-  function stripEmptyObjects(JSONArray) {
+    function stripEmptyObjects(JSONArray) {
 
-  }
+    }
 
+    // show the initial choice after user clicks "Show me an answer"
     function generateInitialPrompt(JSONArray) {
         console.log("ran generateInitialPrompt!");
         document.getElementById("showAnswerButton").style.display = "none";
-
         document.getElementById("yesButton").style.display = "inline";
         document.getElementById("noButton").style.display = "inline";
-
         var answerTextP = document.getElementById("answerText");
-
-
-        
         answerTextP.innerHTML = JSONArray[0]["choice"];
     }
 
-    function showNext(JSONArray, index, userAnswer){
+    function showNext(JSONArray, index, userAnswer) {
         console.log("ran showNext()");
         console.log("showNext: index: " + index);
         var nextIndex = index + 1;
-
-
         console.log("UserAnswer in showNext: " + userAnswer);
         JSONArray[index]["userAnswer"] = userAnswer;
 
@@ -205,7 +201,7 @@
             if (JSONArray[i]["solution"] == JSONArray[i]["userAnswer"]) {
                 console.log("CheckAnswer: Solution: " + JSONArray[i]["solution"]);
                 console.log("CheckAnswers: userAnswer : " + JSONArray[i]["userAnswer"]);
-                console.log("CheckAnswer: Answer marked correct!");
+                console.log("CheckAnsweßr: Answer marked correct!");
                 JSONArray[i]["isUserAnswerCorrect"] = "✓";
             }
             else {
@@ -222,16 +218,16 @@
     }
 
     function persistAnswersWhenFinishedQuestion(JSONArray) {
-                console.log("DONE!");
-                document.getElementById("yesButton").style.display = "none";
-                document.getElementById("noButton").style.display = "none";
-                document.getElementById("answerText").innerHTML = "Please review your answers."
+        console.log("DONE!");
+        document.getElementById("yesButton").style.display = "none";
+        document.getElementById("noButton").style.display = "none";
+        document.getElementById("answerText").innerHTML = "Please review your answers."
 
-                var withAnswers = checkAnswers(JSONArray);
-                var shuffledJSONString = JSON.stringify(withAnswers);
-                //console.log(shuffledJSONString);
-                Persistence.setItem('jsonArray', shuffledJSONString);
-                console.log(withAnswers);
+        var withAnswers = checkAnswers(JSONArray);
+        var shuffledJSONString = JSON.stringify(withAnswers);
+        //console.log(shuffledJSONString);
+        Persistence.setItem('jsonArray', shuffledJSONString);
+        console.log(withAnswers);
     }
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -250,14 +246,15 @@
         let DEFAULT_CARD_TYPE = 1;
         let DEFAULT_SOLUTIONS = "1 0 0 0 0";
 
-       // setTimeout(generateTable(), 1);
         var JSONSolutionArray = generateJSONSolutionArray();
         console.log("running in the body...");
         console.log(JSONSolutionArray);
 
+        //shuffle the JSON array to randomize the order of choices shown to the user
         var shuffled = shuffleJSONArray(JSONSolutionArray);
 
-
+        //Strip any empty values from the JSONarray
+        //copied this from somewhere but cannot find where oops!
         var strippedShuffled = shuffled.filter(object => {
             return object.choice != "";
         });
@@ -265,22 +262,22 @@
         var currentIndexInShuffled = 0;
         var endOfArray = strippedShuffled.length;
         // https://stackoverflow.com/questions/14425397/onclick-function-runs-automatically
-        document.getElementById("showAnswerButton").onclick = function() {
+        document.getElementById("showAnswerButton").onclick = function () {
             generateInitialPrompt(strippedShuffled);
         }
 
 
         //TODO: Generate answer container, but keep it hidden so this function works
-    
-       // console.log("while loop");
-       //TODO: add to notes
-       // https://stackoverflow.com/questions/3042437/how-to-change-the-commit-author-for-a-single-commit
 
-        document.getElementById("yesButton").onclick = function() {
+        // console.log("while loop");
+        //TODO: add to notes
+        // https://stackoverflow.com/questions/3042437/how-to-change-the-commit-author-for-a-single-commit
+
+        document.getElementById("yesButton").onclick = function () {
             if (currentIndexInShuffled < endOfArray) {
-            showNext(strippedShuffled, currentIndexInShuffled, 1);
-            currentIndexInShuffled++;
-            //console.log(shuffled);
+                showNext(strippedShuffled, currentIndexInShuffled, 1);
+                currentIndexInShuffled++;
+                //console.log(shuffled);
             }
             else {
                 //TODO: take care of this terrible repeating code
@@ -288,10 +285,10 @@
             }
         }
 
-        document.getElementById("noButton").onclick = function() {
-            if (currentIndexInShuffled < endOfArray){
-            showNext(strippedShuffled, currentIndexInShuffled, 0);
-            currentIndexInShuffled++;
+        document.getElementById("noButton").onclick = function () {
+            if (currentIndexInShuffled < endOfArray) {
+                showNext(strippedShuffled, currentIndexInShuffled, 0);
+                currentIndexInShuffled++;
             }
             else {
                 //TODO: take care of this terrible repeating code

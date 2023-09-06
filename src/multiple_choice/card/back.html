@@ -11,7 +11,7 @@
 {{#Question}}<p>{{Question}}</p>{{/Question}}
 <p id="percentageCorrect"></p>
 <table id="solutionTable"></table>
-
+ß
 
 <script>
     "use strict";
@@ -27,13 +27,14 @@
              </tr>
         `
 
+        // populate a string that represents the innerHTML of the table with data from the JSONArray
         for (let i = 0; i < JSONArray.length; i++) {
             tableContent += "<tr>";
             tableContent += "<td>" + JSONArray[i]["choice"] + "</td>";
             tableContent += "<td>" + JSONArray[i]["solution"] + "</td>";
             tableContent += "<td>" + JSONArray[i]["userAnswer"] + "</td>";
-            tableContent += "<td>" + JSONArray[i]["feedback"]+ "</td>";
-            tableContent += "<td>" +  JSONArray[i]["isUserAnswerCorrect"] + "</td>";
+            tableContent += "<td>" + JSONArray[i]["feedback"] + "</td>";
+            tableContent += "<td>" + JSONArray[i]["isUserAnswerCorrect"] + "</td>";
             tableContent += "</tr>"
         }
 
@@ -63,24 +64,23 @@
     }
 
     function onLoad() {
-        // Check if Persistence is recognized to prevent errors when viewing note in "Manage Note Types..."
-            
 
-        if(Persistence.isAvailable){
+        // Check if Persistence is recognized to prevent errors when viewing note in "Manage Note Types..."
+        if (Persistence.isAvailable) {
             // Parsing solutions
             var solutions = Persistence.getItem('jsonArray');
 
-            var placeholderJSONString = '[{"choice":"red","solution":"yes","userAnswer":"yes","feedback":"Is a color of the rainbow.","isUserAnswerCorrect":"✓"},{"choice":"periwinkle","solution":"no","userAnswer":"yes","feedback":"Not a color of the rainbow.","isUserAnswerCorrect":"X"},{"choice":"green","solution":"yes","userAnswer":"yes","feedback":"","isUserAnswerCorrect":"✓"},{"choice":"blue","solution":"yes","userAnswer":"yes","feedback":"Is a color of the rainbow.","isUserAnswerCorrect":"✓"},{"choice":"lavender","solution":"no","userAnswer":"no","feedback":"Is not a color of the rainbow.","isUserAnswerCorrect":"X"}]';
+            //var placeholderJSONString = '[{"choice":"red","solution":"yes","userAnswer":"yes","feedback":"Is a color of the rainbow.","isUserAnswerCorrect":"✓"},{"choice":"periwinkle","solution":"no","userAnswer":"yes","feedback":"Not a color of the rainbow.","isUserAnswerCorrect":"X"},{"choice":"green","solution":"yes","userAnswer":"yes","feedback":"","isUserAnswerCorrect":"✓"},{"choice":"blue","solution":"yes","userAnswer":"yes","feedback":"Is a color of the rainbow.","isUserAnswerCorrect":"✓"},{"choice":"lavender","solution":"no","userAnswer":"no","feedback":"Is not a color of the rainbow.","isUserAnswerCorrect":"X"}]';
 
 
-            var JSONSolutionArray = JSON.parse(placeholderJSONString);
+            var JSONSolutionArray = JSON.parse(solutions);
 
             generateSolutionTableFromJSON(JSONSolutionArray);
             calculatePercentageOfCorrectAnswers(JSONSolutionArray);
-            
+
             Persistence.clear();
-    
-}
+
+        }
     }
 
     function isMobile() {
