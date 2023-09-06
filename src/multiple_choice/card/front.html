@@ -152,19 +152,20 @@
 
     function showNext(JSONArray, index, userAnswer){
         console.log("ran showNext()");
-        console.log("Current index: " + index);
+        console.log("showNext: index: " + index);
         var nextIndex = index + 1;
 
 
+        console.log("UserAnswer in showNext: " + userAnswer);
+        JSONArray[index]["userAnswer"] = userAnswer;
 
         try {
             var answerText = JSONArray[nextIndex]["choice"];
-
             document.getElementById("answerText").innerHTML = answerText;
-            JSONArray[index]["userAnswer"] = userAnswer;
+
         }
         catch {
-            console.log("Undefined...");
+            console.log("showNext: answerText: Undefined...");
 
         }
 
@@ -179,6 +180,7 @@
     function replaceWithYesOrNo(JSONArray) {
 
         for (let i = 0; i < JSONArray.length; i++) {
+            console.log("currentIndex: " + i);
             if (JSONArray[i]["solution"] == "1") {
                 JSONArray[i]["solution"] = "yes";
             }
@@ -199,12 +201,17 @@
 
     function checkAnswers(JSONArray) {
         for (let i = 0; i < JSONArray.length; i++) {
+            console.log("checkAnswers: i: " + i);
             if (JSONArray[i]["solution"] == JSONArray[i]["userAnswer"]) {
-                console.log("Solution");
-                console.log(JSONArray[i]["solution"] );
+                console.log("CheckAnswer: Solution: " + JSONArray[i]["solution"]);
+                console.log("CheckAnswers: userAnswer : " + JSONArray[i]["userAnswer"]);
+                console.log("CheckAnswer: Answer marked correct!");
                 JSONArray[i]["isUserAnswerCorrect"] = "✓";
             }
             else {
+                console.log("CheckAnswer: Solution: " + JSONArray[i]["solution"]);
+                console.log("CheckAnswers: userAnswer : " + JSONArray[i]["userAnswer"]);
+                console.log("CheckAnswer: Answer marked wrong!");
                 JSONArray[i]["isUserAnswerCorrect"] = "X";
             }
         }
@@ -222,7 +229,7 @@
 
                 var withAnswers = checkAnswers(JSONArray);
                 var shuffledJSONString = JSON.stringify(withAnswers);
-                console.log(shuffledJSONString);
+                //console.log(shuffledJSONString);
                 Persistence.setItem('jsonArray', shuffledJSONString);
                 console.log(withAnswers);
     }
@@ -256,7 +263,7 @@
         });
 
         var currentIndexInShuffled = 0;
-        var endOfArray = strippedShuffled.length - 1;
+        var endOfArray = strippedShuffled.length;
         // https://stackoverflow.com/questions/14425397/onclick-function-runs-automatically
         document.getElementById("showAnswerButton").onclick = function() {
             generateInitialPrompt(strippedShuffled);
