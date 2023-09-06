@@ -267,8 +267,8 @@
                 document.getElementById("yesButton").style.display = "none";
                 document.getElementById("noButton").style.display = "none";
                 document.getElementById("answerText").innerHTML = "Please review your answers."
-                Persistence.setItem('jsonArray', shuffled);
-
+                var shuffledJSONString = JSON.stringify(shuffled);
+                Persistence.setItem('jsonArray', shuffledJSONString);
                 console.log(shuffled);
             }
         }
@@ -284,7 +284,8 @@
                 document.getElementById("noButton").style.display = "none";
                 document.getElementById("answerText").innerHTML = "Please review your answers."
 
-                Persistence.setItem('jsonArray', shuffled);
+                var shuffledJSONString = JSON.stringify(shuffled);
+                Persistence.setItem('jsonArray', shuffledJSONString);
                 console.log(shuffled);
             }
         }

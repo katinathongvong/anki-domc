@@ -15,14 +15,16 @@
 <p id="canswerresult"><b>Correct answers: x %</b></p>
 {{#Sources}}<p class="small" id="sources"><b>Sources:</b><br />{{Sources}}</p>{{/Sources}}
 {{#Extra 1}}<p class="small" id="extra1"><b>Extra 1:</b><br />{{Extra 1}}</p>{{/Extra 1}}
+<p id="test">changeme</p>
 
 <script>
     "use strict";
 
     function onLoad() {
         // Check if Persistence is recognized to prevent errors when viewing note in "Manage Note Types..."
-        if (Persistence.isAvailable && Persistence.getItem('Q_solutions') !== null) {
+            
 
+        if(Persistence.isAvailable){
             const DEFAULT_COLORING = { // Defines which class should be set
                 wrongAndNotTicked: 'correct',
                 correctAndTicked: 'correct',
@@ -57,8 +59,11 @@
 
             // Parsing solutions
             var solutions = Persistence.getItem('jsonArray');
+            document.getElementById("test").innerHTML = solutions;
             
             Persistence.clear();
+    
+}
     }
 
     function isMobile() {
