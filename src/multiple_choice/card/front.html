@@ -62,6 +62,11 @@
 
 <div id="answerContainer">
     <button id="showAnswerButton">Show me an answer</button>
+    <div id="buttonsAndAnswerText">
+        <button id="yesButton" value="1" style="display:none;">yes</button>
+        <button id="noButton" value="0" style="display:none;">no</button>
+        <p id="answerText"></p>
+    </div>
 </div>
 
 
@@ -123,13 +128,28 @@
         console.log("ran generateInitialPrompt!");
         document.getElementById("showAnswerButton").style.display = "none";
 
-        var answerContainer = document.getElementById("answerContainer");
+        document.getElementById("yesButton").style.display = "inline";
+        document.getElementById("noButton").style.display = "inline";
+
+        var answerTextP = document.getElementById("answerText");
+
 
         
-        answerContainer.innerHTML = '<div><button id="yes" value="1">yes</button> <button id="no" value="0">no</button>' + '<p id="answerText">' + JSONArray[0]["choice"] + '</p></div>';
+        answerTextP.innerHTML = JSONArray[0]["choice"];
     }
 
-    function showNext(){
+    function showNext(JSONArray, index, userAnswer){
+        console.log("ran showNext()");
+
+        if (index != 0) {
+            document.getElementById("answerText").innerHTML = JSONArray[index]["choice"];
+            JSONArray[index]["userAnswer"] = userAnswer;
+        }
+        else {
+            document.getElementById("answerText").innerHTML = JSONArray[1]["choice"];
+            JSONArray[0]["userAnswer"] = userAnswer;
+        }
+
 
     }
 
@@ -227,23 +247,36 @@
         console.log("shuffled");
         console.log(shuffled);
 
+        var currentIndexInShuffled = 0;
+        var lastIndexInShuffled = shuffled.length - 1;
+
         // https://stackoverflow.com/questions/14425397/onclick-function-runs-automatically
         document.getElementById("showAnswerButton").onclick = function() {
             generateInitialPrompt(shuffled);
         }
 
-        document.getElementById("yes").onclick = function() {
-            showNext();
+
+        //TODO: Generate answer container, but keep it hidden so this function works
+
+        document.getElementById("yesButton").onclick = function() {
+            showNext(shuffled, currentIndexInShuffled, 1);
+            currentIndexInShuffled++;
+            console.log(shuffled);
         }
 
-
+        document.getElementById("noButton").onclick = function() {
+            showNext(shuffled, currentIndexInShuffled, 0);
+            currentIndexInShuffled++;
+        }
 
     }
+
+
 
     async function waitForReadyStateAndRun() {
         for (let i = 0; i < 100; i++) {
             if (document.readyState === "complete") {
-                run();
+                setTimeout(run(), 1000);
                 break;
             }
             console.log("Document not yet fully loaded (readyState: " + document.readyState + "). Retry in 0.1s.");
@@ -257,7 +290,7 @@
     license (https://creativecommons.org/licenses/by-sa/4.0/).
     */
     if (document.readyState === "complete") {
-        run();
+        setTimeout(run, 100);
     } else {
         waitForReadyStateAndRun();
     }
