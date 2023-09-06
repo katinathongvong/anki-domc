@@ -19,27 +19,8 @@
     <table style="border: 1px solid black" id="qtable"></table>
 </div>
 
-<!--
-    Placeholder for question array
--->
-
-<!-- 
-<div class="test" id="Q_solutions">{{Answers}}</div>
--->
-
 <div class="test" id="solutions">1 1 1 0 1</div>
-<!--
-    <div class="hidden" id="Card_Type">{{QType (0=kprim,1=mc,2=sc)}}</div>
--->
 
-<!-- 
-<div class="test" id="Card_Type">0</div>
-<div class="test" id="Q_1">red</div>
-<div class="test" id="Q_2">blue</div>
-<div class="test" id="Q_3">green</div>
-<div class="test" id="Q_4">periwinkle</div>
-<div class="test" id="Q_5">indigo</div>
--->
 
 <p>answer test table</p>
 <table id="choices" style="border: 1px solid">
@@ -172,7 +153,18 @@
         return JSONArray;
     }
 
+    function persistAnswersWhenFinishedQuestion(JSONArray) {
+                console.log("DONE!");
+                document.getElementById("yesButton").style.display = "none";
+                document.getElementById("noButton").style.display = "none";
+                document.getElementById("answerText").innerHTML = "Please review your answers."
 
+                var withAnswers = checkAnswers(JSONArray);
+                var shuffledJSONString = JSON.stringify(withAnswers);
+                console.log(shuffledJSONString);
+                Persistence.setItem('jsonArray', shuffledJSONString);
+                console.log(withAnswers);
+    }
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
@@ -202,7 +194,7 @@
         console.log(shuffled);
 
         var currentIndexInShuffled = 0;
-        var lastIndexInShuffled = shuffled.length - 1;
+        var endOfArray = shuffled.length;
 
         // https://stackoverflow.com/questions/14425397/onclick-function-runs-automatically
         document.getElementById("showAnswerButton").onclick = function() {
@@ -217,43 +209,25 @@
        // https://stackoverflow.com/questions/3042437/how-to-change-the-commit-author-for-a-single-commit
 
         document.getElementById("yesButton").onclick = function() {
-            if (currentIndexInShuffled < lastIndexInShuffled + 1) {
+            if (currentIndexInShuffled < endOfArray) {
             showNext(shuffled, currentIndexInShuffled, 1);
             currentIndexInShuffled++;
             //console.log(shuffled);
             }
             else {
                 //TODO: take care of this terrible repeating code
-                console.log("DONE!");
-                document.getElementById("yesButton").style.display = "none";
-                document.getElementById("noButton").style.display = "none";
-                document.getElementById("answerText").innerHTML = "Please review your answers."
-
-                var withAnswers = checkAnswers(shuffled);
-                var shuffledJSONString = JSON.stringify(withAnswers);
-                console.log(shuffledJSONString);
-                Persistence.setItem('jsonArray', shuffledJSONString);
-                console.log(shuffled);
+                persistAnswersWhenFinishedQuestion(shuffled);
             }
         }
 
         document.getElementById("noButton").onclick = function() {
-            if (currentIndexInShuffled < lastIndexInShuffled + 1){
+            if (currentIndexInShuffled < endOfArray){
             showNext(shuffled, currentIndexInShuffled, 0);
             currentIndexInShuffled++;
             }
             else {
                 //TODO: take care of this terrible repeating code
-                console.log("DONE!");
-                document.getElementById("yesButton").style.display = "none";
-                document.getElementById("noButton").style.display = "none";
-                document.getElementById("answerText").innerHTML = "Please review your answers."
-
-                var withAnswers = checkAnswers(shuffled);
-                var shuffledJSONString = JSON.stringify(withAnswers);
-                console.log(shuffledJSONString);
-                Persistence.setItem('jsonArray', shuffledJSONString);
-                console.log(shuffled);
+                persistAnswersWhenFinishedQuestion(shuffled);
             }
         }
 
