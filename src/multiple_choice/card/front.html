@@ -122,14 +122,14 @@
     // from: https://www.freecodecamp.org/news/how-to-shuffle-an-array-of-items-using-javascript-or-typescript/
     function shuffleJSONArray(JSONArray) {
 
-        var arrCopy = Object.assign([], JSONArray);
+        var shuffledArray = Object.assign([], JSONArray);
         let i = JSONArray.length;
   while (i > 0) {
     const ri = Math.floor(Math.random() * i);
     i--;
-    [arrCopy[i], arrCopy[ri]] = [arrCopy[ri], arrCopy[i]];
+    [shuffledArray[i], shuffledArray[ri]] = [shuffledArray[ri], shuffledArray[i]];
   }
-  return arrCopy;
+  return shuffledArray;
   } 
 
   function stripEmptyObjects(JSONArray) {

@@ -43,6 +43,15 @@
 
     function calculatePercentageOfCorrectAnswers(JSONArray) {
         console.log("calculatePercentageOfCorrectAnswers ran!");
+
+        var lengthOfArray = JSONArray.length;
+        var numCorrectAnswers = 0;
+        console.log("calculatePercentageOfCorrectAnswers: lengthOfArray: " + lengthOfArray);
+        for (let i = 0; i < lengthOfArray; i++) {
+            if (JSONArray[i]["isUserAnswerCorrect"] == "✓") {
+                
+            }
+        }
     }
 
     function onLoad() {
