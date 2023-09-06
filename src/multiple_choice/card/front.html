@@ -95,7 +95,8 @@
                 var tempJSON = {
                     "choice": solutionText,
                     "solution": solutionArray[i],
-                    "userAnswer": ""
+                    "userAnswer": "",
+                    "isUserAnswerCorrect": ""
                 };
 
                 JSONSolutionArray.push(tempJSON);
@@ -158,63 +159,22 @@
         console.log(currentIndex == lastIndex);
     }
 
-    //TODO: write answers to persistence
-
-    /**
-     * Get the solutions stored in the hidden div with id "Q_solutions" as Array.
-     */
-    function getCorrectAnswers() {
-        let solutions = document.getElementById("Q_solutions").innerHTML.split(" ").map(string => Number(string));
-
-        return solutions;
-    }
-
-    function storeCorrectAnswersInHtml(solutions) {
-        document.getElementById("Q_solutions").innerHTML = solutions.join(" ");
-    }
-
-    /**
-     * On checking an option this collects and stores answers in between front/back of the card.
-     *
-     * In case of kprim only the first box is looked at, if it isn't checked the second box has to be.
-     * By default a '1' in the answers stands for 'yes' which is the first option from the left.
-     */
-    function onCheck(rowId) {
-        // Send question table and encoded answers to Persistence along with the provided solutions
-        if (Persistence.isAvailable()) {
-            Persistence.clear();
-            Persistence.setItem('user_answers', getUserAnswers());
-            Persistence.setItem('Q_solutions', getCorrectAnswers());
-            Persistence.setItem('qtable', document.getElementById("qtable").innerHTML);
+    function checkAnswers(JSONArray) {
+        for (let i = 0; i < JSONArray.length; i++) {
+            if (JSONArray[i]["solution"] == JSONArray[i]["userAnswer"]) {
+                JSONArray[i]["isUserAnswerCorrect"] = "✓";
+            }
+            else {
+                JSONArray[i]["isUserAnswerCorrect"] = "X";
+            }
         }
-        // hide the table row once we click it
-        document.getElementById(rowId).style.color = "transparent";
+
+        return JSONArray;
     }
+
 
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    function tickCheckboxOnNumberKeyDown(event) {
-        const keyName = event.key;
-
-        let tableBody = document.getElementById("qtable").getElementsByTagName('tbody')[0];
-        var tableRows = tableBody.getElementsByTagName("tr");
-
-        if (0 < +keyName && +keyName < 10) {
-            let tableData = tableRows[+keyName - 1].getElementsByTagName("td")[0];
-            let tableRow = tableData.getElementsByTagName("input")[0];
-            tableRow.checked = !tableRow.checked;
-            onCheck();
-        }
-    }
-
-    // addCheckboxTickingShortcuts is an easy approach on using only the keyboard to toggle checkboxes in mc/sc.
-    //
-    // Naturally the number keys are an intuitive choice here. Unfortunately anki does capture those.
-    // So the workaround is to hold the (left) 'Alt' key and then type the corresponding number to toggle the row.
-    function addCheckboxTickingShortcuts() {
-        document.addEventListener('keydown', tickCheckboxOnNumberKeyDown, false);
     }
 
     function isMobile() {
@@ -263,11 +223,15 @@
             //console.log(shuffled);
             }
             else {
+                //TODO: take care of this terrible repeating code
                 console.log("DONE!");
                 document.getElementById("yesButton").style.display = "none";
                 document.getElementById("noButton").style.display = "none";
                 document.getElementById("answerText").innerHTML = "Please review your answers."
-                var shuffledJSONString = JSON.stringify(shuffled);
+
+                var withAnswers = checkAnswers(shuffled);
+                var shuffledJSONString = JSON.stringify(withAnswers);
+                console.log(shuffledJSONString);
                 Persistence.setItem('jsonArray', shuffledJSONString);
                 console.log(shuffled);
             }
@@ -279,12 +243,15 @@
             currentIndexInShuffled++;
             }
             else {
+                //TODO: take care of this terrible repeating code
                 console.log("DONE!");
                 document.getElementById("yesButton").style.display = "none";
                 document.getElementById("noButton").style.display = "none";
                 document.getElementById("answerText").innerHTML = "Please review your answers."
 
-                var shuffledJSONString = JSON.stringify(shuffled);
+                var withAnswers = checkAnswers(shuffled);
+                var shuffledJSONString = JSON.stringify(withAnswers);
+                console.log(shuffledJSONString);
                 Persistence.setItem('jsonArray', shuffledJSONString);
                 console.log(shuffled);
             }

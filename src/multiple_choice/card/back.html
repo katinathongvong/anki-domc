@@ -59,7 +59,11 @@
 
             // Parsing solutions
             var solutions = Persistence.getItem('jsonArray');
-            document.getElementById("test").innerHTML = solutions;
+
+            var placeholderJSONString = '[{"choice":"red","solution":"1","userAnswer":0},{"choice":"blue","solution":"1","userAnswer":0},{"choice":"green","solution":"1","userAnswer":0},{"choice":"indigo","solution":"1","userAnswer":0},{"choice":"periwinkle","solution":"0","userAnswer":0}]';
+
+            var JSONSolutionArray = JSON.parse(placeholderJSONString);
+            document.getElementById("test").innerHTML = JSONSolutionArray[1]["choice"];
             
             Persistence.clear();
     
