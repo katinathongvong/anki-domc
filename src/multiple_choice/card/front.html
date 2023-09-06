@@ -230,19 +230,6 @@
         let DEFAULT_CARD_TYPE = 1;
         let DEFAULT_SOLUTIONS = "1 0 0 0 0";
 
-        /*
-        if (isNaN(document.getElementById("Card_Type").innerHTML)) {
-            document.getElementById("Card_Type").innerHTML = DEFAULT_CARD_TYPE;
-        }
-        if ('{' + '{Answers}' + '}' == document.getElementById("Q_solutions").innerHTML) {
-            document.getElementById("Q_solutions").innerHTML = DEFAULT_SOLUTIONS;
-        }
-
-        if (document.getElementById("Card_Type").innerHTML != 0 && !isMobile()) {
-            addCheckboxTickingShortcuts();
-        }
-        */
-
 
 
        // setTimeout(generateTable(), 1);
@@ -266,10 +253,11 @@
         //TODO: Generate answer container, but keep it hidden so this function works
     
        // console.log("while loop");
+       //TODO: add to notes
+       // https://stackoverflow.com/questions/3042437/how-to-change-the-commit-author-for-a-single-commit
 
-            console.log("while loop");
         document.getElementById("yesButton").onclick = function() {
-            if (currentIndexInShuffled < lastIndexInShuffled) {
+            if (currentIndexInShuffled < lastIndexInShuffled + 1) {
             showNext(shuffled, currentIndexInShuffled, 1);
             currentIndexInShuffled++;
             //console.log(shuffled);
@@ -279,12 +267,14 @@
                 document.getElementById("yesButton").style.display = "none";
                 document.getElementById("noButton").style.display = "none";
                 document.getElementById("answerText").innerHTML = "Please review your answers."
+                Persistence.setItem('jsonArray', shuffled);
+
                 console.log(shuffled);
             }
         }
 
         document.getElementById("noButton").onclick = function() {
-            if (currentIndexInShuffled < lastIndexInShuffled){
+            if (currentIndexInShuffled < lastIndexInShuffled + 1){
             showNext(shuffled, currentIndexInShuffled, 0);
             currentIndexInShuffled++;
             }
@@ -293,6 +283,8 @@
                 document.getElementById("yesButton").style.display = "none";
                 document.getElementById("noButton").style.display = "none";
                 document.getElementById("answerText").innerHTML = "Please review your answers."
+
+                Persistence.setItem('jsonArray', shuffled);
                 console.log(shuffled);
             }
         }
