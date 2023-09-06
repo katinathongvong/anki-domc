@@ -20,9 +20,9 @@
 {{#Title}}<h3>{{Title}}</h3>{{/Title}}
 {{#Question}}<p>{{Question}}</p>{{/Question}}
 
-<div class="solutions" style="display: none;">{{Answers}}</div>
+<p id="solutions">{{Answers}}</div>
 
-<table id="choices" style="display: none;">
+<table id="choices">
     <tr id="0">
         <td id="answer_0">{{Q_1}}</td>
         <td id="feedback_0">{{Q1_Feedback}}</td>
@@ -89,7 +89,7 @@
 
     function generateJSONSolutionArray() {
         console.log("generateJSONSolutionArray ran");
-        const solutionArray = document.getElementById("solutions").textContent.split(" ");
+        const solutionArray = document.getElementById("solutions").innerHTML.split(" ");
         console.log("The solutionArray is: " + solutionArray)
 
         // create the empty array to populate
@@ -160,6 +160,8 @@
         }
         catch {
             console.log("showNext: answerText: Undefined...");
+            persistAnswersWhenFinishedQuestion(JSONArray);
+
 
         }
 
@@ -263,20 +265,12 @@
                 currentIndexInShuffled++;
                 //console.log(shuffled);
             }
-            else {
-                //TODO: take care of this terrible repeating code
-                persistAnswersWhenFinishedQuestion(strippedShuffled);
-            }
         }
 
         document.getElementById("noButton").onclick = function () {
             if (currentIndexInShuffled < endOfArray) {
                 showNext(strippedShuffled, currentIndexInShuffled, 0);
                 currentIndexInShuffled++;
-            }
-            else {
-                //TODO: take care of this terrible repeating code
-                persistAnswersWhenFinishedQuestion(strippedShuffled);
             }
         }
 
@@ -285,7 +279,7 @@
     async function waitForReadyStateAndRun() {
         for (let i = 0; i < 100; i++) {
             if (document.readyState === "complete") {
-                setTimeout(run(), 1000);
+                run();
                 break;
             }
             console.log("Document not yet fully loaded (readyState: " + document.readyState + "). Retry in 0.1s.");

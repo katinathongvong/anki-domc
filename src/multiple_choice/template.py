@@ -50,8 +50,8 @@ from aqt import Collection, fields, mw
 from .config import *
 from .packaging import version
 
-aio_model_name = "Katina 1.2"
-aio_card = "Katina 1.2"
+aio_model_name = "Katina 1.5"
+aio_card = "Katina 1.5"
 aio_fields = {
     "question": "Question",
     "title": "Title",
