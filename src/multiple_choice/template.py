@@ -50,17 +50,21 @@ from aqt import Collection, fields, mw
 from .config import *
 from .packaging import version
 
-aio_model_name = "AllInOne (kprim, mc, sc)"
-aio_card = "AllInOne (kprim, mc, sc)"
+aio_model_name = "Katina 1.2"
+aio_card = "Katina 1.2"
 aio_fields = {
     "question": "Question",
     "title": "Title",
-    "qtype": "QType (0=kprim,1=mc,2=sc)",
     "q1": "Q_1",
+    "q1_feedback": "Q1_Feedback",
     "q2": "Q_2",
+    "q2_feedback": "Q2_Feedback",
     "q3": "Q_3",
+    "q3_feedback": "Q3_Feedback",
     "q4": "Q_4",
+    "q4_feedback": "Q4_Feedback",
     "q5": "Q_5",
+    "q5_feedback": "Q5_Feedback",
     "answers": "Answers",
     "sources": "Sources",
     "extra": "Extra 1",

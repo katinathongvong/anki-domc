@@ -5,20 +5,45 @@
     if (void 0 === window.Persistence) { var _persistenceKey = "github.com/SimonLammer/anki-persistence/", _defaultKey = "_default"; if (window.Persistence_sessionStorage = function () { var e = !1; try { "object" == typeof window.sessionStorage && (e = !0, this.clear = function () { for (var e = 0; e < sessionStorage.length; e++) { var t = sessionStorage.key(e); 0 == t.indexOf(_persistenceKey) && (sessionStorage.removeItem(t), e--) } }, this.setItem = function (e, t) { void 0 == t && (t = e, e = _defaultKey), sessionStorage.setItem(_persistenceKey + e, JSON.stringify(t)) }, this.getItem = function (e) { return void 0 == e && (e = _defaultKey), JSON.parse(sessionStorage.getItem(_persistenceKey + e)) }, this.removeItem = function (e) { void 0 == e && (e = _defaultKey), sessionStorage.removeItem(_persistenceKey + e) }) } catch (e) { } this.isAvailable = function () { return e } }, window.Persistence_windowKey = function (e) { var t = window[e], i = !1; "object" == typeof t && (i = !0, this.clear = function () { t[_persistenceKey] = {} }, this.setItem = function (e, i) { void 0 == i && (i = e, e = _defaultKey), t[_persistenceKey][e] = i }, this.getItem = function (e) { return void 0 == e && (e = _defaultKey), t[_persistenceKey][e] || null }, this.removeItem = function (e) { void 0 == e && (e = _defaultKey), delete t[_persistenceKey][e] }, void 0 == t[_persistenceKey] && this.clear()), this.isAvailable = function () { return i } }, window.Persistence = new Persistence_sessionStorage, Persistence.isAvailable() || (window.Persistence = new Persistence_windowKey("py")), !Persistence.isAvailable()) { var titleStartIndex = window.location.toString().indexOf("title"), titleContentIndex = window.location.toString().indexOf("main", titleStartIndex); titleStartIndex > 0 && titleContentIndex > 0 && titleContentIndex - titleStartIndex < 10 && (window.Persistence = new Persistence_windowKey("qt")) } }
 </script>
 
-{{#Title}}<h3 id="myH1">{{Title}}</h3>{{/Title}}
+<link rel="stylesheet" href="css.css">
+
+{{#Title}}<h3>{{Title}}</h3>{{/Title}}
 {{#Question}}<p>{{Question}}</p>{{/Question}}
-<table id="qtable"></table>
-<p id="output"></p>
-<div class="hidden" id="MC_solutions">solutions_here</div>
-<div class="hidden" id="user_answers">user_answers_here</div>
-<div class="hidden" id="CardType">{{QType (0=kprim,1=mc,2=sc)}}</div>
-<p id="canswerresult"><b>Correct answers: x %</b></p>
-{{#Sources}}<p class="small" id="sources"><b>Sources:</b><br />{{Sources}}</p>{{/Sources}}
-{{#Extra 1}}<p class="small" id="extra1"><b>Extra 1:</b><br />{{Extra 1}}</p>{{/Extra 1}}
-<p id="test">changeme</p>
+<table id="solutionArea"></table>
+
 
 <script>
     "use strict";
+
+    function generateSolutionTableFromJSON(JSONArray) {
+        var headers = `
+            <tr>
+            <th>Option</th>
+            <th>Solution</th>
+            <th>Your Answer</th>
+            <th>Feedback</th>
+            <th>Correct?</th>
+             </tr>
+        `
+
+        for (let i = 0; i < JSONArray.length; i++) {
+            headers += "<tr>";
+            headers += "<td>" + JSONArray[i]["choice"] + "</td>";
+            headers += "<td>" + JSONArray[i]["solution"] + "</td>";
+            headers += "<td>" + JSONArray[i]["userAnswer"] + "</td>";
+            headers += "<td>" + JSONArray[i]["feedback"]+ "</td>";
+            headers += "<td>" +  JSONArray[i]["isUserAnswerCorrect"] + "</td>";
+            headers += "</tr>"
+        }
+
+        document.getElementById("solutionArea").innerHTML = headers;
+
+    }
+
+
+    function calculatePercentageOfCorrectAnswers(JSONArray) {
+        console.log("calculatePercentageOfCorrectAnswers ran!");
+    }
 
     function onLoad() {
         // Check if Persistence is recognized to prevent errors when viewing note in "Manage Note Types..."
@@ -60,10 +85,12 @@
             // Parsing solutions
             var solutions = Persistence.getItem('jsonArray');
 
-            var placeholderJSONString = '[{"choice":"red","solution":"1","userAnswer":0},{"choice":"blue","solution":"1","userAnswer":0},{"choice":"green","solution":"1","userAnswer":0},{"choice":"indigo","solution":"1","userAnswer":0},{"choice":"periwinkle","solution":"0","userAnswer":0}]';
+            var placeholderJSONString = '[{"choice":"red","solution":"yes","userAnswer":"yes","feedback":"Is a color of the rainbow.","isUserAnswerCorrect":"✓"},{"choice":"periwinkle","solution":"no","userAnswer":"yes","feedback":"Not a color of the rainbow.","isUserAnswerCorrect":"X"},{"choice":"green","solution":"yes","userAnswer":"yes","feedback":"","isUserAnswerCorrect":"✓"},{"choice":"blue","solution":"yes","userAnswer":"yes","feedback":"Is a color of the rainbow.","isUserAnswerCorrect":"✓"},{"choice":"lavender","solution":"no","userAnswer":"no","feedback":"Is not a color of the rainbow.","isUserAnswerCorrect":"X"}]';
+
 
             var JSONSolutionArray = JSON.parse(placeholderJSONString);
-            document.getElementById("test").innerHTML = JSONSolutionArray[1]["choice"];
+
+            generateSolutionTableFromJSON(JSONSolutionArray);
             
             Persistence.clear();
     

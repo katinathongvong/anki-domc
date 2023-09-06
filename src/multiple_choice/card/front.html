@@ -5,39 +5,68 @@
     if (void 0 === window.Persistence) { var _persistenceKey = "github.com/SimonLammer/anki-persistence/", _defaultKey = "_default"; if (window.Persistence_sessionStorage = function () { var e = !1; try { "object" == typeof window.sessionStorage && (e = !0, this.clear = function () { for (var e = 0; e < sessionStorage.length; e++) { var t = sessionStorage.key(e); 0 == t.indexOf(_persistenceKey) && (sessionStorage.removeItem(t), e--) } }, this.setItem = function (e, t) { void 0 == t && (t = e, e = _defaultKey), sessionStorage.setItem(_persistenceKey + e, JSON.stringify(t)) }, this.getItem = function (e) { return void 0 == e && (e = _defaultKey), JSON.parse(sessionStorage.getItem(_persistenceKey + e)) }, this.removeItem = function (e) { void 0 == e && (e = _defaultKey), sessionStorage.removeItem(_persistenceKey + e) }) } catch (e) { } this.isAvailable = function () { return e } }, window.Persistence_windowKey = function (e) { var t = window[e], i = !1; "object" == typeof t && (i = !0, this.clear = function () { t[_persistenceKey] = {} }, this.setItem = function (e, i) { void 0 == i && (i = e, e = _defaultKey), t[_persistenceKey][e] = i }, this.getItem = function (e) { return void 0 == e && (e = _defaultKey), t[_persistenceKey][e] || null }, this.removeItem = function (e) { void 0 == e && (e = _defaultKey), delete t[_persistenceKey][e] }, void 0 == t[_persistenceKey] && this.clear()), this.isAvailable = function () { return i } }, window.Persistence = new Persistence_sessionStorage, Persistence.isAvailable() || (window.Persistence = new Persistence_windowKey("py")), !Persistence.isAvailable()) { var titleStartIndex = window.location.toString().indexOf("title"), titleContentIndex = window.location.toString().indexOf("main", titleStartIndex); titleStartIndex > 0 && titleContentIndex > 0 && titleContentIndex - titleStartIndex < 10 && (window.Persistence = new Persistence_windowKey("qt")) } }
 </script>
 
+<link rel="stylesheet" href="css.css">
+
 <h3 id="myH1">test title</h3>
 
 <!-- Question placeholder -->
 <p>Is this a color of the rainbow?</p>
 
-<!--
     {{#Title}}<h3 id="myH1">{{Title}}</h3>{{/Title}}
 {{#Question}}<p>{{Question}}</p>{{/Question}}
--->
 
 <div class="tappable">
     <table style="border: 1px solid black" id="qtable"></table>
 </div>
 
-<div class="test" id="solutions">1 1 1 0 1</div>
+<div class="test" id="solutions">1 0 1 1 0</div>
 
 
+<!--
 <p>answer test table</p>
-<table id="choices" style="border: 1px solid">
+<table id="choices" style="display: none;">
     <tr id ="0">
-        <td id="answer_0">red</td>
+        <td id="answer_0">{{Q_1}}</td>
+
     </tr>
     <tr id="1">
-        <td id="answer_1">blue</td>
+        <td id="answer_1">{{Q_2}}</td>
     </tr>
     <tr id="2">
-        <td id="answer_2">green</td>
+        <td id="answer_2">{{Q_3}}</td>
     </tr>
     <tr id="3">
         <td id="answer_3">periwinkle</td>
     </tr>
     <tr id="4">
         <td id="answer_4">indigo</td>
+    </tr>
+</table>
+
+-->
+
+<table id="choices" style="display: none;">
+    <tr id ="0">
+        <td id="answer_0">red</td>
+        <td id="feedback_0">Is a color of the rainbow.</td>
+    </tr>
+    <tr id="1">
+        <td id="answer_1">periwinkle</td>
+        <td id="feedback_1">Not a color of the rainbow.</td>
+    </tr>
+    <tr id="2">
+        <td id="answer_2">blue</td>
+        <td id="feedback_2">Is a color of the rainbow.</td>
+
+    </tr>
+    <tr id="3">
+        <td id="answer_3">green</td>
+        <td id="feedback_3"></td>
+    </tr>
+    <tr id="4">
+        <td id="answer_4">lavender</td>
+        <td id="feedback_4">Is not a color of the rainbow.</td>
+
     </tr>
 </table>
 
@@ -63,20 +92,17 @@
         var choiceTable = document.getElementById("choices");
         for (let i = 0 ; i < choiceTable.rows.length; i++) 
             {
-                console.log(i);
-                currentRow = choiceTable.rows[i];
-                console.log(currentRow);
-                console.log("currentCell")
-                currentCell = currentRow.cells;
-                console.log(currentCell);
-                cellId = "answer_" + i;
-                var solutionText = document.getElementById(cellId).innerHTML;
+                solutionTextCellId = "answer_" + i;
+                feedbackTextCellId = "feedback_" + i;
+                var solutionText = document.getElementById(solutionTextCellId).innerHTML;
+                var feedbackText = document.getElementById(feedbackTextCellId).innerHTML;
                 console.log("Solution text");
                 console.log(solutionText);
                 var tempJSON = {
                     "choice": solutionText,
                     "solution": solutionArray[i],
                     "userAnswer": "",
+                    "feedback": feedbackText,
                     "isUserAnswerCorrect": ""
                 };
 
@@ -106,6 +132,10 @@
   return arrCopy;
   } 
 
+  function stripEmptyObjects(JSONArray) {
+
+  }
+
     function generateInitialPrompt(JSONArray) {
         console.log("ran generateInitialPrompt!");
         document.getElementById("showAnswerButton").style.display = "none";
@@ -122,16 +152,21 @@
 
     function showNext(JSONArray, index, userAnswer){
         console.log("ran showNext()");
+        console.log("Current index: " + index);
+        var nextIndex = index + 1;
 
-        if (index != 0) {
-            document.getElementById("answerText").innerHTML = JSONArray[index]["choice"];
+
+
+        try {
+            var answerText = JSONArray[nextIndex]["choice"];
+
+            document.getElementById("answerText").innerHTML = answerText;
             JSONArray[index]["userAnswer"] = userAnswer;
         }
-        else {
-            document.getElementById("answerText").innerHTML = JSONArray[1]["choice"];
-            JSONArray[0]["userAnswer"] = userAnswer;
-        }
+        catch {
+            console.log("Undefined...");
 
+        }
 
     }
 
@@ -140,15 +175,41 @@
         console.log(currentIndex == lastIndex);
     }
 
+    //replaces a 0 or a 1 with a yes or no
+    function replaceWithYesOrNo(JSONArray) {
+
+        for (let i = 0; i < JSONArray.length; i++) {
+            if (JSONArray[i]["solution"] == "1") {
+                JSONArray[i]["solution"] = "yes";
+            }
+            else {
+                JSONArray[i]["solution"] = "no";
+            }
+
+            if (JSONArray[i]["userAnswer"] == "1") {
+                JSONArray[i]["userAnswer"] = "yes";
+            }
+            else {
+                JSONArray[i]["userAnswer"] = "no";
+            }
+        }
+
+        return JSONArray;
+    }
+
     function checkAnswers(JSONArray) {
         for (let i = 0; i < JSONArray.length; i++) {
             if (JSONArray[i]["solution"] == JSONArray[i]["userAnswer"]) {
+                console.log("Solution");
+                console.log(JSONArray[i]["solution"] );
                 JSONArray[i]["isUserAnswerCorrect"] = "✓";
             }
             else {
                 JSONArray[i]["isUserAnswerCorrect"] = "X";
             }
         }
+
+        JSONArray = replaceWithYesOrNo(JSONArray);
 
         return JSONArray;
     }
@@ -182,23 +243,23 @@
         let DEFAULT_CARD_TYPE = 1;
         let DEFAULT_SOLUTIONS = "1 0 0 0 0";
 
-
-
        // setTimeout(generateTable(), 1);
         var JSONSolutionArray = generateJSONSolutionArray();
         console.log("running in the body...");
         console.log(JSONSolutionArray);
 
         var shuffled = shuffleJSONArray(JSONSolutionArray);
-        console.log("shuffled");
-        console.log(shuffled);
+
+
+        var strippedShuffled = shuffled.filter(object => {
+            return object.choice != "";
+        });
 
         var currentIndexInShuffled = 0;
-        var endOfArray = shuffled.length;
-
+        var endOfArray = strippedShuffled.length - 1;
         // https://stackoverflow.com/questions/14425397/onclick-function-runs-automatically
         document.getElementById("showAnswerButton").onclick = function() {
-            generateInitialPrompt(shuffled);
+            generateInitialPrompt(strippedShuffled);
         }
 
 
@@ -210,34 +271,28 @@
 
         document.getElementById("yesButton").onclick = function() {
             if (currentIndexInShuffled < endOfArray) {
-            showNext(shuffled, currentIndexInShuffled, 1);
+            showNext(strippedShuffled, currentIndexInShuffled, 1);
             currentIndexInShuffled++;
             //console.log(shuffled);
             }
             else {
                 //TODO: take care of this terrible repeating code
-                persistAnswersWhenFinishedQuestion(shuffled);
+                persistAnswersWhenFinishedQuestion(strippedShuffled);
             }
         }
 
         document.getElementById("noButton").onclick = function() {
             if (currentIndexInShuffled < endOfArray){
-            showNext(shuffled, currentIndexInShuffled, 0);
+            showNext(strippedShuffled, currentIndexInShuffled, 0);
             currentIndexInShuffled++;
             }
             else {
                 //TODO: take care of this terrible repeating code
-                persistAnswersWhenFinishedQuestion(shuffled);
+                persistAnswersWhenFinishedQuestion(strippedShuffled);
             }
         }
 
     }
-
-    
-    
-    
-
-
 
     async function waitForReadyStateAndRun() {
         for (let i = 0; i < 100; i++) {
