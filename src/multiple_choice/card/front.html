@@ -14,7 +14,10 @@
 <p>Is this a color of the rainbow?</p>
 -->
 
-{{#Title}}<h3 id="myH1">{{Title}}</h3>{{/Title}}
+<!--
+    Placeholder HTML to be populated by Anki fields
+-->
+{{#Title}}<h3>{{Title}}</h3>{{/Title}}
 {{#Question}}<p>{{Question}}</p>{{/Question}}
 
 <div class="solutions" style="display: none;">{{Answers}}</div>
@@ -22,28 +25,27 @@
 <table id="choices" style="display: none;">
     <tr id="0">
         <td id="answer_0">{{Q_1}}</td>
-        <td id="feedback_0">Is a color of the rainbow.</td>
+        <td id="feedback_0">{{Q1_Feedback}}</td>
     </tr>
     <tr id="1">
         <td id="answer_1">{{Q_2}}</td>
-        <td id="feedback_1">Not a color of the rainbow.</td>
+        <td id="feedback_1">{{Q2_Feedback}}</td>
     </tr>
     <tr id="2">
         <td id="answer_2">{{Q_3}}</td>
-        <td id="feedback_2">Is a color of the rainbow.</td>
+        <td id="feedback_2">{{Q3_Feedback}}</td>
 
     </tr>
     <tr id="3">
         <td id="answer_3">{{Q_4}}</td>
-        <td id="feedback_3"></td>
+        <td id="feedback_3">{{Q4_Feedback}}</td>
     </tr>
     <tr id="4">
         <td id="answer_4">{{Q_5}}</td>
-        <td id="feedback_4">Is not a color of the rainbow.</td>
+        <td id="feedback_4">{{Q5_Feedback}}</td>
 
     </tr>
 </table>
-
 
 <!--
     PLACEHOLDER TEST DATA
@@ -109,10 +111,7 @@
             };
 
             JSONSolutionArray.push(tempJSON);
-            // your code below
             console.log(JSONSolutionArray);
-
-
         }
         console.log("generated initial array");
         console.log(JSONSolutionArray);
@@ -123,7 +122,6 @@
     //https://raddevon.com/articles/copy-javascript-object/
     // from: https://www.freecodecamp.org/news/how-to-shuffle-an-array-of-items-using-javascript-or-typescript/
     function shuffleJSONArray(JSONArray) {
-
         var shuffledArray = Object.assign([], JSONArray);
         let i = JSONArray.length;
         while (i > 0) {
@@ -174,7 +172,6 @@
 
     //replaces a 0 or a 1 with a yes or no
     function replaceWithYesOrNo(JSONArray) {
-
         for (let i = 0; i < JSONArray.length; i++) {
             console.log("currentIndex: " + i);
             if (JSONArray[i]["solution"] == "1") {
@@ -191,7 +188,6 @@
                 JSONArray[i]["userAnswer"] = "no";
             }
         }
-
         return JSONArray;
     }
 
@@ -201,7 +197,7 @@
             if (JSONArray[i]["solution"] == JSONArray[i]["userAnswer"]) {
                 console.log("CheckAnswer: Solution: " + JSONArray[i]["solution"]);
                 console.log("CheckAnswers: userAnswer : " + JSONArray[i]["userAnswer"]);
-                console.log("CheckAnsweßr: Answer marked correct!");
+                console.log("CheckAnswers: Answer marked correct!");
                 JSONArray[i]["isUserAnswerCorrect"] = "✓";
             }
             else {
@@ -213,7 +209,6 @@
         }
 
         JSONArray = replaceWithYesOrNo(JSONArray);
-
         return JSONArray;
     }
 
@@ -242,10 +237,6 @@
     }
 
     function run() {
-        // for previewing the cards in "Manage Note Type..."
-        let DEFAULT_CARD_TYPE = 1;
-        let DEFAULT_SOLUTIONS = "1 0 0 0 0";
-
         var JSONSolutionArray = generateJSONSolutionArray();
         console.log("running in the body...");
         console.log(JSONSolutionArray);
@@ -265,13 +256,6 @@
         document.getElementById("showAnswerButton").onclick = function () {
             generateInitialPrompt(strippedShuffled);
         }
-
-
-        //TODO: Generate answer container, but keep it hidden so this function works
-
-        // console.log("while loop");
-        //TODO: add to notes
-        // https://stackoverflow.com/questions/3042437/how-to-change-the-commit-author-for-a-single-commit
 
         document.getElementById("yesButton").onclick = function () {
             if (currentIndexInShuffled < endOfArray) {
