@@ -3,10 +3,12 @@
 
 Adds discrete option multiple choice (DOMC) cards to Anki. A fork of [Multiple Choice for Anki](https://ankiweb.net/shared/info/1566095810).
 
+![Alt text](gif.gif)
+
 For more information on DOMC-style questions see [Caveon's website](https://domc.caveon.com/home).
 
+
 - [Why DOMC questions over regular multiple choice?](#why-domc-questions-over-regular-multiple-choice)
-- [Screenshots](#screenshots)
 - [Compatibility](#compatibility)
 - [Usage](#usage)
   - [Creating / Editing](#creating--editing)
@@ -18,10 +20,6 @@ For more information on DOMC-style questions see [Caveon's website](https://domc
 ## Why DOMC questions over regular multiple choice? 
 - With multiple choice questions, you are presented ALL answers at the same time. This allows you to easily deduce the right answer from answers that are clearly wrong, even if you don't actually know the right answer.
 - With DOMC questions, each answer is presented to you one at a time, meaning you can't use the context of other options to guess the right answer. You answer "yes" or "no" to each option. Options are presented one at a time in random order.
-
-## Screenshots
-
-
 
 ## Compatibility
 
@@ -51,7 +49,13 @@ Question: **Is this a color of the rainbow?**
 | yellow       | yes    | yellow is the "Y" in ROYGBIV                                                                   |
 | yellow-green | no     | yellow-green is not a color of the rainbow.                                                    |
 
-You would fill in the fields of the Anki card like this: 
+You would fill in the fields of the Anki card like this for a "yes" answer: 
+![Alt text](image.png)
+
+...and like this for a "no" answer.
+
+![Alt text](image-1.png)
+
 
 ### Reviewing
 Select the correct and incorrect choices accordingly and click "Show Answer".
@@ -61,6 +65,7 @@ The add-on will automatically calculate what percentage you answered correctly. 
 ### TODO:
 - Make the card creation process a little more user friendly. I don't like the idea of having THREE fields for one different option, but I don't see a way to have multiple values for one field without introducing higher chances of user error.
 - Test the cards on mobile. Not sure if they work or if they would be difficult to view. 
+- Make the styling prettier, eventually, because I can!
 - Pray there are no bugs.
 
 ## License and Credits
