@@ -3,7 +3,7 @@
 
 Adds discrete option multiple choice (DOMC) cards to Anki. A fork of [Multiple Choice for Anki](https://ankiweb.net/shared/info/1566095810).
 
-![Alt text](gif.gif)
+![Alt text](gif2.gif)
 
 For more information on DOMC-style questions see [Caveon's website](https://domc.caveon.com/home).
 
@@ -50,7 +50,7 @@ Question: **Is this a color of the rainbow?**
 | yellow-green | no     | yellow-green is not a color of the rainbow.                                                    |
 
 You would fill in the fields of the Anki card like this for a "yes" answer: 
-![Alt text](image.png)
+![Alt text](image-3.png)
 
 ...and like this for a "no" answer.
 
@@ -66,7 +66,9 @@ The add-on will automatically calculate what percentage you answered correctly. 
 - Make the card creation process a little more user friendly. I don't like the idea of having THREE fields for one different option, but I don't see a way to have multiple values for one field without introducing higher chances of user error.
 - Test the cards on mobile. Not sure if they work or if they would be difficult to view. 
 - Make the styling prettier, eventually, because I can!
+- Make the percentages prettier without floats. Make them whole numbers - round up or down. 
 - Pray there are no bugs.
+- Look at code for user configuration options and figure out how to remove it entirely from the code without breaking things, as it's never used.
 
 ## License and Credits
 
