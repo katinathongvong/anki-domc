@@ -1,6 +1,8 @@
 <script>
-    //BIG TODO: write better comments please
-    //use JSDOC: https://jsdoc.app/about-getting-started.html
+    // Used JSDOC syntax for documenting these functions
+    // thank you to: https://marioyepes.com/jsdoc-intro-and-tutorial/ for really breaking it down
+    // in a way that's easy for a beginner to understand
+
     // Loading Persistence
     // https://github.com/SimonLammer/anki-persistence
     // v0.5.2 - https://github.com/SimonLammer/anki-persistence/blob/62463a7f63e79ce12f7a622a8ca0beb4c1c5d556/script.js
@@ -10,15 +12,19 @@
 <link rel="stylesheet" href="css.css">
 
 
-<!-- QUESTION PLACEHOLDER:
-<p>Is this a color of the rainbow?</p>
--->
-
-<!--
-    Placeholder HTML to be populated by Anki fields
--->
 {{#Title}}<h3>{{Title}}</h3>{{/Title}}
 {{#Question}}<p>{{Question}}</p>{{/Question}}
+
+<!--
+    Placeholder HTML to be populated by Anki fields.
+    When the user enters values into Anki fields, we
+    throw those values into a hidden table on the front
+    of the card. 
+
+    This allows our functions to grab the data from the fields
+    and process them into an array of JSON objects
+    containing information about our question options.
+-->
 
 <table id="choices" style="display: none;">
     <tr id="0">
@@ -75,6 +81,10 @@
 
 <!--
     PLACEHOLDER TEST DATA
+    Hardcoded values were used to test the initial plugin.
+    They are here for reference. 
+
+    <p>What is the color of the rainbow?</p>
 <table id="choices" style="display: none;">
     <tr id="0">
         <td id="answer_0">red</td>
@@ -101,9 +111,21 @@
 </table>
 -->
 
+<!--
+    The "answerContainer" div shows the user the
+    different answer choices and the "yes" and "no"
+    buttons for them to answer. 
+
+    The generateInitialPrompt() and showNext()
+    functions do the heavy lifting of changing
+    the choice that is shown to the user once they
+    click "yes" or "no".
+-->
 <div id="answerContainer">
+    <!-- This button goes away once the user clicks it. -->
     <button id="showAnswerButton">Show me an answer</button>
     <div id="buttonsAndAnswerText">
+        <!-- We avoid showing the user the yes or no buttons until they click "Show me an answer" -->
         <button id="yesButton" value="1" style="display:none;">yes</button>
         <button id="noButton" value="0" style="display:none;">no</button>
         <p id="answerText"></p>
@@ -113,10 +135,13 @@
 
 <script>
 
-    function generateJSONSolutionArray() {
+ 
+    /**
+     * Description
+     * @returns {Array<object>} JSONSolutionArray - an array of JSON objects containing the answer choices and solutions.
+     */
+    function generateJSONSolutionArray(){
         console.log("generateJSONSolutionArray ran");
-        //const solutionArray = document.getElementById("solutions").innerHTML.split(" ");
-        //console.log("The solutionArray is: " + solutionArray)
 
         // create the empty array to populate
         var JSONSolutionArray = [];
@@ -164,7 +189,10 @@
 
     }
 
-    // show the initial choice after user clicks "Show me an answer"
+    /**
+     * Shows the first option to the user when they click the "Show me an answer" button.
+     * @param {Array<object} JSONArray - a shuffled array of JSON objects that contains question options.
+     */
     function generateInitialPrompt(JSONArray) {
         console.log("ran generateInitialPrompt!");
         document.getElementById("showAnswerButton").style.display = "none";
