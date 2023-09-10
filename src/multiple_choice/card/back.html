@@ -11,8 +11,7 @@
 {{#Question}}<p>{{Question}}</p>{{/Question}}
 <p id="percentageCorrect"></p>
 <table id="solutionTable"></table>
-ß
-
+{{#Sources}}<p>{{Sources}}</p>{{/Sources}}
 <script>
     "use strict";
 
@@ -35,7 +34,7 @@
             tableContent += "<td>" + JSONArray[i]["userAnswer"] + "</td>";
             tableContent += "<td>" + JSONArray[i]["feedback"] + "</td>";
             tableContent += "<td>" + JSONArray[i]["isUserAnswerCorrect"] + "</td>";
-            tableContent += "</tr>"
+            tableContent += "</tr>";
         }
 
         document.getElementById("solutionTable").innerHTML = tableContent;

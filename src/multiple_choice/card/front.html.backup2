@@ -20,7 +20,7 @@
 {{#Title}}<h3>{{Title}}</h3>{{/Title}}
 {{#Question}}<p>{{Question}}</p>{{/Question}}
 
-<table id="choices" style="display: none;">
+<table id="choices">
     <tr id="0">
         <td id="choice_0">{{Q_1}}</td>
         <td id="feedback_0">{{Q1_Feedback}}</td>

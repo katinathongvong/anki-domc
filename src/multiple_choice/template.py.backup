@@ -50,8 +50,8 @@ from aqt import Collection, fields, mw
 from .config import *
 from .packaging import version
 
-aio_model_name = "DOMC 1.2"
-aio_card = "DOMC 1.2"
+aio_model_name = "Discrete Option Multiple Choice 1.1"
+aio_card = "Discrete Option Multiple Choice 1.1"
 aio_fields = {
     "question": "Question",
     "title": "Title",
@@ -85,11 +85,11 @@ aio_fields = {
     "q9_answer": "Q9_Answer",
     "q10": "Q_10",
     "q10_feedback": "Q10_Feedback",
-    "q10_answer": "Q10_Answer",
+    "q10_answer": "Q10_Answer"
 }
 
 QUESTION_ID_PATTERN = r"^Q_(\d+)$"
-DEFAULT_NUMBER_OF_QUESTIONS = 10
+DEFAULT_NUMBER_OF_QUESTIONS = 5
 
 
 class Template_side(Enum):
@@ -104,45 +104,6 @@ def get_addon_name() -> str:
 def get_addon_path() -> str:
     return mw.addonManager.addonsFolder() + "/" + get_addon_name() + "/"
 
-
-def getOptionsJavaScriptFromConfig(user_config, side: Template_side):
-    """Get OPTIONS string to write into JavaScript on card template.
-
-    Boolean values differ in Python ('True') VS JavaScript ('true') so they
-    need to be converted.
-    """
-
-    user_config_front_options_javascript = (
-        "\n".join(
-            [
-                "const OPTIONS = {",
-                f"    maxQuestionsToShow: {user_config['maxQuestionsToShow']}",
-                "};",
-            ]
-        )
-        + "\n"
-    )
-    user_config_back_options_javascript = (
-        "const OPTIONS = {\n"
-        "    qtable: {\n"
-        f"        visible: true,\n"
-        f"        colorize: {'true' if user_config['colorQuestionTable'] else 'false'},\n"
-        f"        colors: {user_config['answerColoring']}\n"
-        "    },\n"
-        "    atable: {\n"
-        f"        visible: {'false' if user_config['hideAnswerTable'] else 'true'},\n"
-        f"        colorize: {'true' if user_config['colorAnswerTable'] else 'false'},\n"
-        f"        colors: {user_config['answerColoring']}\n"
-        "    }\n"
-        "};\n"
-    )
-    return (
-        user_config_front_options_javascript
-        if side == Template_side.FRONT
-        else user_config_back_options_javascript
-    )
-
-
 def fillTemplateAndModelFromFile(template, model, user_config={}):
     """Modify the referenced `model` by a user config or using the defaults instead."""
 
@@ -156,25 +117,9 @@ def fillTemplateAndModelFromFile(template, model, user_config={}):
 
     with open(get_addon_path() + "card/front.html", encoding="utf-8") as f:
         front_template = f.read()
-        if user_config:
-            front_template = re.sub(
-                r"const OPTIONS.*?;",
-                front_options_java_script,
-                front_template,
-                1,
-                re.DOTALL,
-            )
         template["qfmt"] = front_template
     with open(get_addon_path() + "card/back.html", encoding="utf-8") as f:
         back_template = f.read()
-        if user_config:
-            back_template = re.sub(
-                r"const OPTIONS.*?;",
-                back_options_java_script,
-                back_template,
-                1,
-                re.DOTALL,
-            )
         template["afmt"] = back_template
     with open(get_addon_path() + "card/css.css", encoding="utf-8") as f:
         model["css"] = f.read()
