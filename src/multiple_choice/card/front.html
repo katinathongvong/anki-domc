@@ -1,4 +1,6 @@
 <script>
+    // Big fat disclaimer: I'm not a professional developer / programmer. So some of this code might not be the 
+    // best or most performant, but it works! haha... 
     // Used JSDOC syntax for documenting these functions
     // thank you to: https://marioyepes.com/jsdoc-intro-and-tutorial/ for really breaking it down
     // in a way that's easy for a beginner to understand
@@ -10,7 +12,6 @@
 </script>
 
 <link rel="stylesheet" href="css.css">
-
 
 {{#Title}}<h3>{{Title}}</h3>{{/Title}}
 {{#Question}}<p>{{Question}}</p>{{/Question}}
@@ -135,7 +136,17 @@
 
 <script>
 
- 
+    /**
+     * An array of JSON objects that holds the question choices,
+     * the correct answers, user answers, and choice feedback. 
+     *
+     * @typedef {Array<object>} - JSONSolutionArray
+     * @property {String} choice - The choice / answer text
+     * @property {String} solution - The correct answer for the choice. It's a "1" for "yes" and "0" for no.
+     * @property {Boolean} [isDeveloper=true] Set to `true` is the person is a developer
+     * @property {Number} city City code for the person
+     */
+
     /**
      * Description
      * @returns {Array<object>} JSONSolutionArray - an array of JSON objects containing the answer choices and solutions.
@@ -147,14 +158,22 @@
         var JSONSolutionArray = [];
         var choiceTable = document.getElementById("choices");
         for (let i = 0; i < choiceTable.rows.length; i++) {
+
+            // grab the IDs of the HTML elements we are pulling the JSON data from
             choiceTextCellId = "choice_" + i;
             feedbackTextCellId = "feedback_" + i;
             answerTextCellId = "answer_" + i;
+
+            // get the text of the HTML elements based on IDs so we can populate our JSONSolutionArray
             var choiceText = document.getElementById(choiceTextCellId).innerHTML;
             var feedbackText = document.getElementById(feedbackTextCellId).innerHTML;
             var answerText = document.getElementById(answerTextCellId).innerHTML;
             console.log("Solution text");
             console.log(choiceText);
+
+            // generate a temporary JSON object containing the data
+            // userAnswer and isUserAnswerCorrect properties are blank for now
+            // they will be filled in later.
             var tempJSON = {
                 "choice": choiceText,
                 "solution": answerText,
@@ -163,6 +182,7 @@
                 "isUserAnswerCorrect": ""
             };
 
+            // add our temporary object to the array
             JSONSolutionArray.push(tempJSON);
             console.log(JSONSolutionArray);
         }
@@ -185,13 +205,9 @@
         return shuffledArray;
     }
 
-    function stripEmptyObjects(JSONArray) {
-
-    }
-
     /**
      * Shows the first option to the user when they click the "Show me an answer" button.
-     * @param {Array<object} JSONArray - a shuffled array of JSON objects that contains question options.
+     * @param {Array<object>} JSONArray - a shuffled array of JSON objects that contains question options.
      */
     function generateInitialPrompt(JSONArray) {
         console.log("ran generateInitialPrompt!");
@@ -202,13 +218,20 @@
         answerTextP.innerHTML = JSONArray[0]["choice"];
     }
 
+    /**
+     * Shows the next answer option to the user. Also stores the "yes" or "no" answer for the last option
+     * @param {Array<object>} JSONArray - a shuffled array of JSON objects that contains question options.
+     */
     function showNext(JSONArray, index, userAnswer) {
         console.log("ran showNext()");
         console.log("showNext: index: " + index);
         var nextIndex = index + 1;
         console.log("UserAnswer in showNext: " + userAnswer);
+
+        // stores the user answer
         JSONArray[index]["userAnswer"] = userAnswer;
 
+        // we use a try-catch statement here in case we reach the end of the array
         try {
             var answerText = JSONArray[nextIndex]["choice"];
             document.getElementById("answerText").innerHTML = answerText;
@@ -217,12 +240,16 @@
         catch {
             console.log("showNext: answerText: Undefined...");
             persistAnswersWhenFinishedQuestion(JSONArray);
-
-
         }
 
     }
 
+    /*
+        This function is redundant and never used. It's been a while since I've examined the code - 
+        since life got in the way and I got pulled into working on other things. 
+        I am pretty certain I MEANT to use this somewhere. Sitting on this for a bit until I get
+        the chance to sit down and reexamine and refactor the code.
+    */
     function checkIfAtEndOfArray(currentIndex, lastIndex) {
         console.log("running checkIfAtEndOfArray");
         console.log(currentIndex == lastIndex);
